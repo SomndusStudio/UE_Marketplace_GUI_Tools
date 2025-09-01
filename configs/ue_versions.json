@@ -1,0 +1,7 @@
+{
+  "versions": [
+    { "id": "ue54", "label": "UE 5.4",   "engine_path": "C:/Program Files/Epic Games/UE_5.4" },
+    { "id": "ue55","label": "UE 5.5",   "engine_path": "C:/Program Files/Epic Games/UE_5.5" },
+    { "id": "ue56","label": "UE 5.6",   "engine_path": "D:/Programs/Epic Games/UE_5.6" }
+  ]
+}

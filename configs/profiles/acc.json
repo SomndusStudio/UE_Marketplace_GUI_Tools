@@ -1,0 +1,23 @@
+{
+  "name": "acc",
+  "template_dir": "C:/UnrealEngine/SimpleFlyRide",
+  "output_dir": "D:/GameDev/MarketplaceProjects/SFR/Package",
+  "zip_pattern": "{project}_{ueversion}",
+  "versions": [
+    {
+      "version_id": "ue54",
+      "engine_path": "C:/Program Files/Epic Games/UE_5.4",
+      "checked": true
+    },
+    {
+      "version_id": "ue55",
+      "engine_path": "C:/Program Files/Epic Games/UE_5.5",
+      "checked": true
+    },
+    {
+      "version_id": "ue56",
+      "engine_path": "D:/Programs/Epic Games/UE_5.6",
+      "checked": true
+    }
+  ]
+}
