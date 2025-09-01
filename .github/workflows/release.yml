@@ -19,12 +19,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: requirements.txt
 
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          if (Test-Path requirements.txt) { pip install -r requirements.txt }
-          pip install pyinstaller
+          pip install -r requirements.txt
 
       - name: Build exe with PyInstaller
         run: |
@@ -40,7 +41,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path release
           Copy-Item -Path "dist\UEFabZipTools.exe" -Destination "release\UEFabZipTools.exe" -Force
           if (Test-Path "configs") { Copy-Item -Path "configs" -Destination "release\configs" -Recurse -Force }
-          # (optionnel) inclure d'autres fichiers: README, LICENSE, etc.
+          # Include others files like : README, LICENSE, etc.
           if (Test-Path "README.md") { Copy-Item README.md release\README.md -Force }
           if (Test-Path "LICENSE")   { Copy-Item LICENSE   release\LICENSE   -Force }
 
