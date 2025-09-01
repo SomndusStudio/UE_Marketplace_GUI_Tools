@@ -1,5 +1,5 @@
 {
-  "name": "sfr",
+  "name": "SFR",
   "template_dir": "C:/UnrealEngine/SimpleFlyRide",
   "output_dir": "D:/GameDev/MarketplaceProjects/SFR/Package",
   "zip_pattern": "{project}_{ueversion}",
@@ -24,5 +24,11 @@
     "AutoSizeComments",
     "BlueprintAssist",
     "ElectronicNodes"
+  ],
+  "root_excludes": [
+    "Script",
+    "LICENSE",
+    "README.md",
+    "SimpleFlyRide.png"
   ]
 }

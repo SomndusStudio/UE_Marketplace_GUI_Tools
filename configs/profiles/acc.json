@@ -1,23 +1,29 @@
 {
-  "name": "acc",
-  "template_dir": "C:/UnrealEngine/SimpleFlyRide",
+  "name": "ACC",
+  "template_dir": "C:/UnrealEngine/ACC_ProjectExample",
   "output_dir": "D:/GameDev/MarketplaceProjects/SFR/Package",
   "zip_pattern": "{project}_{ueversion}",
   "versions": [
     {
       "version_id": "ue54",
       "engine_path": "C:/Program Files/Epic Games/UE_5.4",
-      "checked": true
+      "checked": false
     },
     {
       "version_id": "ue55",
       "engine_path": "C:/Program Files/Epic Games/UE_5.5",
-      "checked": true
+      "checked": false
     },
     {
       "version_id": "ue56",
       "engine_path": "D:/Programs/Epic Games/UE_5.6",
       "checked": true
     }
-  ]
+  ],
+  "plugins_to_strip": [
+    "AutoSizeComments",
+    "BlueprintAssist",
+    "PluginBuilder"
+  ],
+  "root_excludes": []
 }

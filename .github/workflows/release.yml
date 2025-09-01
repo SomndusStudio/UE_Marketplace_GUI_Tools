@@ -1,0 +1,67 @@
+name: Build & Release (Windows, PyInstaller)
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+          pip install pyinstaller
+
+      # 👉 Ajoute ici les hidden-import si besoin (ex: pyqtdarktheme)
+      - name: Build exe with PyInstaller
+        run: |
+          pyinstaller src\main.py `
+            --name UEFabZipTools `
+            --onefile `
+            --noconsole `
+            --icon=assets/app.ico
+
+      - name: Prepare release bundle
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release
+          Copy-Item -Path "dist\UEFabZipTools.exe" -Destination "release\UEFabZipTools.exe" -Force
+          if (Test-Path "configs") { Copy-Item -Path "configs" -Destination "release\configs" -Recurse -Force }
+          # (optionnel) inclure d'autres fichiers: README, LICENSE, etc.
+          if (Test-Path "README.md") { Copy-Item README.md release\README.md -Force }
+          if (Test-Path "LICENSE")   { Copy-Item LICENSE   release\LICENSE   -Force }
+
+      - name: Create zip
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $zipName = "UEFabZipTools-$tag-win64.zip"
+          Compress-Archive -Path "release\*" -DestinationPath $zipName -Force
+          echo "ZIP_NAME=$zipName" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Upload asset to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ZIP_NAME }}

@@ -1,8 +1,11 @@
+# ui_helpers.py
+
 from PySide6.QtCore import QRect, QSize
 from PySide6.QtGui import QPainter, Qt, QPalette, QPen, QFontMetrics
 from PySide6.QtWidgets import QStyledItemDelegate
 
-USERROLE_PREVIEW     = Qt.UserRole + 2  # holds the preview string
+USERROLE_PREVIEW = Qt.ItemDataRole.UserRole + 2  # holds the preview string
+
 
 class VersionPreviewDelegate(QStyledItemDelegate):
     """Paints the normal checkbox + label, then a gray preview right below the label (not over the checkbox)."""

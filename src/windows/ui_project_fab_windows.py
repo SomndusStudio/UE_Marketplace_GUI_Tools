@@ -120,15 +120,41 @@ class Ui_MainWindow(object):
         self.grpPlugins.setObjectName(u"grpPlugins")
         self.verticalLayout = QVBoxLayout(self.grpPlugins)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.label_2 = QLabel(self.grpPlugins)
         self.label_2.setObjectName(u"label_2")
 
-        self.verticalLayout.addWidget(self.label_2)
+        self.verticalLayout_3.addWidget(self.label_2)
 
         self.listPlugins = QListView(self.grpPlugins)
         self.listPlugins.setObjectName(u"listPlugins")
 
-        self.verticalLayout.addWidget(self.listPlugins)
+        self.verticalLayout_3.addWidget(self.listPlugins)
+
+
+        self.horizontalLayout_2.addLayout(self.verticalLayout_3)
+
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.lblExcludeFolders = QLabel(self.grpPlugins)
+        self.lblExcludeFolders.setObjectName(u"lblExcludeFolders")
+
+        self.verticalLayout_2.addWidget(self.lblExcludeFolders)
+
+        self.listFolders = QListView(self.grpPlugins)
+        self.listFolders.setObjectName(u"listFolders")
+        self.listFolders.setMinimumSize(QSize(0, 140))
+
+        self.verticalLayout_2.addWidget(self.listFolders)
+
+
+        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
 
         self.verticalLayout_root.addWidget(self.grpPlugins)
@@ -159,6 +185,7 @@ class Ui_MainWindow(object):
 
         self.btnCancel = QPushButton(self.centralwidget)
         self.btnCancel.setObjectName(u"btnCancel")
+        self.btnCancel.setEnabled(False)
 
         self.horizontalLayout.addWidget(self.btnCancel)
 
@@ -220,17 +247,17 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 1030, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
-        self.menuProfiles = QMenu(self.menubar)
-        self.menuProfiles.setObjectName(u"menuProfiles")
         self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName(u"menuHelp")
+        self.menuTheme = QMenu(self.menubar)
+        self.menuTheme.setObjectName(u"menuTheme")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuProfiles.menuAction())
+        self.menubar.addAction(self.menuTheme.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         self.menuFile.addAction(self.actionQuit)
         self.menuHelp.addAction(self.actionAbout)
@@ -241,7 +268,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"UE Template Packager", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"UE5 Fab Zip Tools", None))
         self.actionQuit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About ", None))
         self.grpProfile.setTitle(QCoreApplication.translate("MainWindow", u"Profil", None))
@@ -249,7 +276,7 @@ class Ui_MainWindow(object):
         self.btnSaveProfile.setText(QCoreApplication.translate("MainWindow", u"Save", None))
         self.lblProfile.setText(QCoreApplication.translate("MainWindow", u"Active profile :", None))
         self.btnRenameProfile.setText(QCoreApplication.translate("MainWindow", u"Rename", None))
-        self.grpProject.setTitle(QCoreApplication.translate("MainWindow", u"Projet", None))
+        self.grpProject.setTitle(QCoreApplication.translate("MainWindow", u"Project", None))
         self.lblTemplate.setText(QCoreApplication.translate("MainWindow", u"UE5 Project Folder:", None))
         self.edTemplate.setPlaceholderText(QCoreApplication.translate("MainWindow", u"/path/to/my/ue_project", None))
         self.btnBrowseTemplate.setText(QCoreApplication.translate("MainWindow", u"Browse...", None))
@@ -261,16 +288,17 @@ class Ui_MainWindow(object):
         self.edPattern.setToolTip(QCoreApplication.translate("MainWindow", u"{project} = nom du projet, {ueversion} = 5.x, {date} = AAAAMMJJ_HHMMSS", None))
 #endif // QT_CONFIG(tooltip)
         self.edPattern.setText(QCoreApplication.translate("MainWindow", u"{project}_UE{ueversion}", None))
-        self.grpPlugins.setTitle(QCoreApplication.translate("MainWindow", u"Plugins", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Select plugins to exclude in the ZIP", None))
+        self.grpPlugins.setTitle(QCoreApplication.translate("MainWindow", u"Plugins / Sub Folders", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Plugins in .uproject to exclude in ZIP", None))
+        self.lblExcludeFolders.setText(QCoreApplication.translate("MainWindow", u"Extra Files/Folders to exclude in ZIP", None))
         self.grpVersions.setTitle(QCoreApplication.translate("MainWindow", u"UE Versions", None))
         self.lblVersions.setText(QCoreApplication.translate("MainWindow", u"Select the versions to package:", None))
-        self.btnBuild.setText(QCoreApplication.translate("MainWindow", u"Zip", None))
+        self.btnBuild.setText(QCoreApplication.translate("MainWindow", u"Zip - UE5 Project Versions", None))
         self.btnCancel.setText(QCoreApplication.translate("MainWindow", u"Cancel", None))
         self.btnOpenOut.setText(QCoreApplication.translate("MainWindow", u"Open Output Folder", None))
         self.lblFooter.setText(QCoreApplication.translate("MainWindow", u"Copyright \u00a9 SCHARTIER Isaac trading as Somndus Studio", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
-        self.menuProfiles.setTitle(QCoreApplication.translate("MainWindow", u"Profiles", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.menuTheme.setTitle(QCoreApplication.translate("MainWindow", u"Theme", None))
     # retranslateUi
 

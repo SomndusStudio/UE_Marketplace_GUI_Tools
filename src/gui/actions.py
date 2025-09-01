@@ -1,49 +1,62 @@
 # actions.py
 from __future__ import annotations
-from dataclasses import dataclass
-from pathlib import Path
-from typing import List, Tuple
-
-from PySide6.QtWidgets import (
-    QMainWindow, QFileDialog, QMessageBox, QInputDialog
-)
-from PySide6.QtGui import QStandardItem, QStandardItemModel
-from PySide6.QtCore import Qt, QObject
 
 import logging
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Tuple, TYPE_CHECKING
+
+from PySide6.QtCore import Qt, QTimer, Slot, QObject
+from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtWidgets import (
+    QFileDialog, QMessageBox, QInputDialog
+)
+
+from src.gui.folder_lists import selected_root_excludes
+from src.gui.plugin_lists import selected_plugins_to_strip
+from src.gui.workers import BuildParams, BuildWorker, BuildController
+from src.core.config import get_seven_zip_path
+from src.gui.ui_bridge import UiBridge
+
 logger = logging.getLogger(__name__)
 
-from profiles import (
+from src.core.profiles import (
     AppVersion,
     Profile, ProfileVersionRef,
     load_profile, save_profile, list_profile_names,
     resolve_profile_versions_for_ui, rename_profile,
 )
-from src.builder import build_zip_set
-from src.ui_helpers import USERROLE_PREVIEW
-from src.utils import build_zip_preview
+
+from src.gui.ui_helpers import USERROLE_PREVIEW
+from src.core.utils import build_zip_preview
 
 # Custom roles for model data
-USERROLE_VERSION_ID = Qt.UserRole
-USERROLE_ENGINE_PATH = Qt.UserRole + 1
+USERROLE_VERSION_ID = Qt.ItemDataRole.UserRole
+USERROLE_ENGINE_PATH = Qt.ItemDataRole.UserRole + 1
+
+# Typage checking for IDE
+if TYPE_CHECKING:
+    from windows import MainWindow  # imported only for type hints
 
 
 @dataclass
 class AppContext:
     """Light-weight container passed to Actions to avoid circular imports."""
-    main_window: QMainWindow          # for dialogs/parent
-    ui: QObject                       # Ui_MainWindow instance (has the widgets)
+    main_window: MainWindow  # for dialogs/parent
+    ui: MainWindow  # Ui_MainWindow instance (has the widgets)
     versions_model: QStandardItemModel
     catalog: List[AppVersion]
 
 
-class Actions:
+class Actions(QObject):
     """All UI event handlers live here (button clicks, menu actions, etc.)."""
 
     def __init__(self, ctx: AppContext):
+        self.build_ctrl = None
         self.ctx = ctx
+        super().__init__(ctx.main_window)
 
-    # ---------- Public handlers (connect these to signals) ----------
+    # ---------- Public handlers ----------
 
     def on_browse_template(self):
         """Let the user pick the UE project directory."""
@@ -77,7 +90,7 @@ class Actions:
             self.ctx.main_window.settings.setValue("last_profile", name)
 
         except Exception as e:
-            QMessageBox.critical(self, "Profiles", f"Failed to load profile '{name}': {e}")
+            QMessageBox.critical(self.ctx.main_window, "Profiles", f"Failed to load profile '{name}': {e}")
 
     def on_save_profile_clicked(self):
         prof = self._build_profile_from_ui()  # keep current combo name
@@ -106,6 +119,7 @@ class Actions:
             QMessageBox.critical(self.ctx.main_window, "Profiles", f"Failed to create profile: {e}")
             return
         self.refresh_profiles_combo(select_name=new_prof.name)
+
     # ---------- Profiles combo refresh ----------
 
     def refresh_profiles_combo(self, select_name: str | None = None):
@@ -142,21 +156,22 @@ class Actions:
             self._append_version_item(appv.id, appv.label, eff_path, ref.checked)
 
         # Refresh plugin checked
-        self.ctx.main_window.rescan_plugins_from_project()
+        # TODO : Only when path not change but profile yes so maybe another checked
+        self.ctx.main_window.check_profile_state()
 
     def _append_version_item(self, version_id: str, label: str, engine_path: str, checked: bool):
         """Append a single checkable row into the list model."""
         it = QStandardItem(label)
         it.setEditable(False)
         it.setCheckable(True)
-        it.setCheckState(Qt.Checked if checked else Qt.Unchecked)
+        it.setCheckState(Qt.CheckState.Checked if checked else Qt.CheckState.Unchecked)
         it.setData(version_id, USERROLE_VERSION_ID)
         it.setData(engine_path, USERROLE_ENGINE_PATH)
 
         # NEW: compute and store the preview text
         pattern = self.ctx.ui.edPattern.text().strip() or "{project}_{ueversion}"
         template_dir = self.ctx.ui.edTemplate.text().strip()
-        preview = build_zip_preview(pattern, template_dir, label, id)
+        preview = build_zip_preview(pattern, template_dir, label, version_id)
         it.setData(preview, USERROLE_PREVIEW)
 
         self.ctx.versions_model.appendRow(it)
@@ -169,10 +184,11 @@ class Actions:
             refs.append(ProfileVersionRef(
                 version_id=str(it.data(USERROLE_VERSION_ID)),
                 engine_path=str(it.data(USERROLE_ENGINE_PATH) or ""),
-                checked=(it.checkState() == Qt.Checked),
+                checked=(it.checkState() == Qt.CheckState.Checked),
             ))
 
-        plugins_to_strip = self.ctx.main_window.selected_plugins_to_strip()
+        plugins_to_strip = selected_plugins_to_strip(self.ctx.main_window.plugins_model)
+        root_excludes = selected_root_excludes(self.ctx.main_window.root_entries_model)
 
         return Profile(
             name=name or self.ctx.ui.cmbProfile.currentText() or "Default",
@@ -180,7 +196,8 @@ class Actions:
             output_dir=self.ctx.ui.edOut.text().strip(),
             zip_pattern=self.ctx.ui.edPattern.text().strip() or "{project}_{ueversion}",
             versions=refs,
-            plugins_to_strip=plugins_to_strip
+            plugins_to_strip=plugins_to_strip,
+            root_excludes=root_excludes
         )
 
     def get_checked_versions(self) -> List[Tuple[str, str]]:
@@ -188,7 +205,7 @@ class Actions:
         out: list[tuple[str, str]] = []
         for row in range(self.ctx.versions_model.rowCount()):
             it = self.ctx.versions_model.item(row)
-            if it.checkState() == Qt.Checked:
+            if it.checkState() == Qt.CheckState.Checked:
                 vid = str(it.data(USERROLE_VERSION_ID))
                 ep = str(it.data(USERROLE_ENGINE_PATH) or "")
                 out.append((vid, ep))
@@ -236,15 +253,16 @@ class Actions:
         QMessageBox.information(self.ctx.main_window, "Profiles", f"Profile renamed to '{new_name.strip()}'.")
         self.refresh_profiles_combo(select_name=new_name.strip())
 
+    def on_cancel_clicked(self):
+        if getattr(self, "build_ctrl", None):
+            self.build_ctrl.cancel()
+            self.ctx.ui.txtLogs.appendPlainText("Cancel requested…")
+
     def on_build_clicked(self):
         """Collect checked versions and kick off the build pipeline (placeholder)."""
         template_dir = Path(self.ctx.ui.edTemplate.text().strip())
         output_dir = Path(self.ctx.ui.edOut.text().strip())
         pattern = self.ctx.ui.edPattern.text().strip() or "{project}_{ueversion}"
-
-        # clean ui
-        self.ctx.ui.txtLogs.clear()
-        self.ctx.ui.progressBar.setValue(0)
 
         # collect checked versions with labels
         checked: list[tuple[str, str, str]] = []  # (version_id, version_label, engine_path)
@@ -257,27 +275,103 @@ class Actions:
                 label = it.text()  # display label from catalog, e.g. "UE 5.4"
                 checked.append((vid, label, ep))
 
-        # Todo from auto/config file
-        seven_zip_path = Path("C:/Program Files/7-Zip/7z.exe")
+        # get seven zip path from config
+        seven_zip_path = get_seven_zip_path()
 
-        plugins_to_strip = set(self.ctx.main_window.selected_plugins_to_strip())
+        plugins_to_strip = set(selected_plugins_to_strip(self.ctx.main_window.plugins_model))
+        root_excludes = set(selected_root_excludes(self.ctx.main_window.root_entries_model))
 
         logger.info("Plugins marked for removal: %s", plugins_to_strip)
+        logger.info("Root files/directories marked for exclude: %s", root_excludes)
 
-        try:
-            outputs = build_zip_set(
-                project_root=template_dir,
-                out_dir=output_dir,
-                pattern=pattern,
-                selections=checked,
-                seven_zip=seven_zip_path,
-                remove_plugins=True,  # per your requirement
-                plugins_to_strip=plugins_to_strip,
-                on_log=lambda msg: self.ctx.ui.txtLogs.appendPlainText(msg),
-                on_progress=lambda p: self.ctx.ui.progressBar.setValue(p),
-            )
-        except Exception as e:
-            QMessageBox.critical(self.ctx.main_window, "Build", f"Build failed:\n{e}")
+        # Worker Builder
+        params = BuildParams(
+            project_root=template_dir,
+            output_dir=output_dir,
+            pattern=pattern,
+            selections=checked,  # list of (version_id, version_label, engine_path)
+            seven_zip_path=seven_zip_path,
+            plugins_to_strip=plugins_to_strip,
+            root_excludes=root_excludes,
+        )
+        worker = BuildWorker(params)
+        self.build_ctrl = BuildController(worker, parent_thread_parent=self.ctx.main_window)
+
+        # créé dans le thread GUI
+        self.ui_bridge = UiBridge(self.ctx.ui, parent=self)
+
+        # wire signals to UI
+        self.build_ctrl.connect_signals(
+            ui_bridge=self.ui_bridge,
+        )
+
+        # UI state
+        self.ctx.ui.txtLogs.clear()
+        self.ctx.ui.progressBar.setValue(0)
+        self.ctx.ui.btnBuild.setEnabled(False)
+        self.ctx.ui.btnCancel.setEnabled(True)
+
+        self.build_ctrl.start()
+
+    @Slot(str)
+    def _on_build_log(self, text: str):
+        logger.info("_on_build_log")
+
+        self.ctx.ui.txtLogs.appendPlainText(text)
+
+    @Slot(int)
+    def _on_build_progress(self, value: int):
+        logger.info(f'_on_build_progress : {value}')
+        self.ctx.ui.progressBar.setValue(value)
+
+    @Slot(list)
+    def _on_build_done(self, paths: list):
+        logger.info("_on_build_done")
+
+        self.ctx.ui.progressBar.setValue(100)
+
+        self.ctx.ui.txtLogs.appendPlainText("Done.")
+        self._restore_idle_state()
+
+    @Slot(str)
+    def _on_build_error(self, msg: str):
+        logger.info("_on_build_error")
+
+        self.ctx.ui.txtLogs.appendPlainText(f"ERROR: {msg}")
+        self._restore_idle_state()
+
+    @Slot()
+    def _on_build_canceled(self):
+        logger.info("_on_build_canceled")
+
+        self.ctx.ui.txtLogs.appendPlainText("Canceled.")
+        self._restore_idle_state()
+
+    def _restore_idle_state(self):
+        logger.info("_restore_idle_state")
+
+        # UI state
+        self.ctx.ui.btnBuild.setEnabled(True)
+        self.ctx.ui.btnCancel.setEnabled(False)
+
+        ctrl = getattr(self, "build_ctrl", None)
+        if not ctrl:
             return
 
-        #QMessageBox.information(self.ctx.main_window, "Build done", "Created:\n" + "\n".join(map(str, outputs)))
+        # Request thread end
+        if ctrl.thread.isRunning():
+            ctrl.thread.quit()
+
+        # Avoid calling .wait() directly here (risk of crash/delays)
+        # Defer the wait to the next event loop iteration.
+        def _finalize():
+            try:
+                if ctrl.thread.isRunning():
+                    ctrl.thread.wait(5000)  # timeout de sécurité
+            except Exception:
+                pass
+            # Free memory ref
+            if getattr(self, "build_ctrl", None) is ctrl:
+                self.build_ctrl = None
+
+        QTimer.singleShot(0, _finalize)

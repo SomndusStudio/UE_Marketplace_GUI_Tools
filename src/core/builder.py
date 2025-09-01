@@ -2,15 +2,14 @@
 from __future__ import annotations
 
 import json
-import os
 import shutil
 import subprocess
 import tempfile
-from dataclasses import dataclass
-from typing import Optional, Callable
-from pathlib import Path
-from typing import Iterable, Optional, Sequence, Tuple
 import zipfile
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Callable
+from typing import Iterable, Optional, Sequence, Tuple
 
 
 # --------------------------- Data models --------------------------- #
@@ -18,17 +17,18 @@ import zipfile
 @dataclass
 class BuildSelection:
     """A single UE target to build."""
-    version_id: str          # e.g. "ue54"
-    version_label: str       # e.g. "UE 5.4" (used for {ueversion} name formatting)
-    engine_path: str         # path to Unreal Engine root for this version (not strictly needed here)
+    version_id: str  # e.g. "ue54"
+    version_label: str  # e.g. "UE 5.4" (used for {ueversion} name formatting)
+    engine_path: str  # path to Unreal Engine root for this version (not strictly needed here)
 
 
 # --------------------------- Helpers ------------------------------- #
 
 DEFAULT_EXCLUDES: tuple[str, ...] = (
     "Binaries", "Build", "Intermediate", "Saved", "DerivedDataCache",
-    ".git", ".github", ".gitlab", ".vs", ".idea", "__pycache__",
+    ".git", ".gitattributes", ".gitignore", ".github", ".gitlab", ".vs", ".idea", "__pycache__",
 )
+
 
 def _is_7z_available(explicit_path: Optional[Path]) -> Optional[Path]:
     """Return a 7-Zip executable path if available."""
@@ -37,6 +37,7 @@ def _is_7z_available(explicit_path: Optional[Path]) -> Optional[Path]:
     which = shutil.which("7z") or shutil.which("7z.exe")
     return Path(which) if which else None
 
+
 def _find_uproject(root: Path) -> Path:
     """Find the first .uproject file in the project root."""
     for p in root.glob("*.uproject"):
@@ -44,15 +45,19 @@ def _find_uproject(root: Path) -> Path:
             return p
     raise FileNotFoundError("No .uproject found in project root.")
 
+
 def _load_uproject(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 def _dump_uproject(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
 
+
 def _sanitize_version_label_to_token(label: str) -> str:
     """Turn 'UE 5.4' into '5_4' (remove 'UE' and replace '.' with '_')."""
     return label.replace("UE", "").strip().replace(".", "_")
+
 
 def _format_zip_basename(pattern: str, template_dir: Path, version_label: str) -> str:
     """Format the base name (without extension) from the naming pattern."""
@@ -63,6 +68,7 @@ def _format_zip_basename(pattern: str, template_dir: Path, version_label: str) -
     except Exception:
         base = f"{project}_{ueversion}"
     return base
+
 
 def _iter_project_files(src_root: Path, excludes: Iterable[str]) -> Iterable[Path]:
     """Yield files under src_root excluding top-level folders in `excludes`."""
@@ -81,17 +87,19 @@ def _iter_project_files(src_root: Path, excludes: Iterable[str]) -> Iterable[Pat
         elif child.is_file():
             yield child
 
+
 def _relative_to_root(path: Path, root: Path) -> str:
     return str(path.relative_to(root)).replace("\\", "/")
+
 
 # --------------------------- Base ZIP creation ---------------------- #
 
 def create_base_zip(
-    project_root: Path,
-    out_dir: Path,
-    base_name: str,
-    seven_zip: Optional[Path],
-    excludes: Sequence[str] = DEFAULT_EXCLUDES,
+        project_root: Path,
+        out_dir: Path,
+        base_name: str,
+        seven_zip: Optional[Path],
+        excludes: Sequence[str] = DEFAULT_EXCLUDES,
 ) -> Path:
     """
     Create a base ZIP of the project root excluding heavy/dev folders.
@@ -118,13 +126,13 @@ def create_base_zip(
                 zf.write(file, arc)
     return base_zip
 
+
 # --------------------------- Uproject mutation ---------------------- #
 
 def build_mutated_uproject_bytes(
-    original_uproject_path: Path,
-    engine_association: str,
-    remove_plugins: bool = True,
-    plugins_to_strip=set[str],
+        original_uproject_path: Path,
+        engine_association: str,
+        plugins_to_strip=set[str],
 ) -> bytes:
     """
     Return bytes of a mutated .uproject:
@@ -149,14 +157,15 @@ def build_mutated_uproject_bytes(
 
     return json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
 
+
 # --------------------------- Apply version to ZIP ------------------- #
 
 def update_zip_uproject_with_7z(
-    src_zip: Path,
-    dst_zip: Path,
-    uproject_relpath: str,
-    new_uproject_bytes: bytes,
-    seven_zip: Path,
+        src_zip: Path,
+        dst_zip: Path,
+        uproject_relpath: str,
+        new_uproject_bytes: bytes,
+        seven_zip: Path,
 ) -> None:
     """
     Copy src_zip to dst_zip and replace the .uproject entry using 7-Zip 'u' (update).
@@ -181,11 +190,12 @@ def update_zip_uproject_with_7z(
         # If the .uproject sits at archive root, we can update by filename:
         subprocess.run([str(seven_zip), "u", "-y", str(dst_zip), str(tmp_uproject)], check=True)
 
+
 def update_zip_uproject_python(
-    src_zip: Path,
-    dst_zip: Path,
-    uproject_relpath: str,
-    new_uproject_bytes: bytes,
+        src_zip: Path,
+        dst_zip: Path,
+        uproject_relpath: str,
+        new_uproject_bytes: bytes,
 ) -> None:
     """
     Copy src_zip to dst_zip while replacing the .uproject entry using Python's zipfile.
@@ -193,7 +203,8 @@ def update_zip_uproject_python(
     # Write to a temp then move to dst_zip to avoid partial files on error
     with tempfile.TemporaryDirectory() as td:
         tmp_zip = Path(td) / "new.zip"
-        with zipfile.ZipFile(src_zip, "r") as zin, zipfile.ZipFile(tmp_zip, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+        with zipfile.ZipFile(src_zip, "r") as zin, zipfile.ZipFile(tmp_zip, "w",
+                                                                   compression=zipfile.ZIP_DEFLATED) as zout:
             # Copy all entries except the .uproject we are replacing
             for item in zin.infolist():
                 arcname = item.filename
@@ -206,20 +217,29 @@ def update_zip_uproject_python(
             zout.writestr(uproject_relpath, new_uproject_bytes)
         shutil.copy2(tmp_zip, dst_zip)
 
+
 # --------------------------- Orchestrator --------------------------- #
+def check_cancel(on_check_cancel: Optional[Callable[[], bool]], on_log: Optional[Callable[[str], None]] = None):
+    """Raise RuntimeError('Canceled') if cancel was requested."""
+    if on_check_cancel and on_check_cancel():
+        if on_log:
+            on_log("Canceled.")
+        raise RuntimeError("Canceled")
+
 
 def build_zip_set(
-    project_root: Path,
-    out_dir: Path,
-    pattern: str,
-    selections: Sequence[Tuple[str, str, str]],
-    # selections: list of (version_id, version_label, engine_path)
-    seven_zip: Optional[Path] = None,
-    remove_plugins: bool = True,
-    excludes: Sequence[str] = DEFAULT_EXCLUDES,
-    plugins_to_strip=set[str],
-    on_log: Optional[Callable[[str], None]] = None,
-    on_progress: Optional[Callable[[int], None]] = None
+        project_root: Path,
+        out_dir: Path,
+        pattern: str,
+        selections: Sequence[Tuple[str, str, str]],
+        # selections: list of (version_id, version_label, engine_path)
+        seven_zip: Optional[Path] = None,
+        remove_plugins: bool = True,
+        excludes: set[str] | None = None,  # default None,
+        plugins_to_strip=set[str],
+        on_log: Optional[Callable[[str], None]] = None,
+        on_progress: Optional[Callable[[int], None]] = None,
+        on_check_cancel: Optional[Callable[[], bool]] = None,
 ) -> list[Path]:
     """
     End-to-end build:
@@ -237,21 +257,31 @@ def build_zip_set(
     uproject_path = _find_uproject(project_root)
     uproject_relpath = _relative_to_root(uproject_path, project_root)
 
+    check_cancel(on_check_cancel, on_log)
+
     on_log("Creating base zip (excluding heavy/dev folders)...")
 
+    if excludes is None:
+        # caller did not override, use defaults only
+        excludes = DEFAULT_EXCLUDES
+    else:
+        # caller provided something → merge with defaults
+        excludes = tuple(set(DEFAULT_EXCLUDES) | set(excludes))
+
     # Create base archive once
-    base_name = _format_zip_basename(pattern, project_root, "UE X.Y")  # timestamp side-effect; not used directly
     base_zip = create_base_zip(project_root, out_dir, base_name="__UE_BASE__", seven_zip=seven_zip, excludes=excludes)
+
+    check_cancel(on_check_cancel, on_log)
 
     seven = _is_7z_available(seven_zip)
     results: list[Path] = []
 
     # For progression
-    idx = 0
     total = len(selections)
 
-    for version_id, version_label, _engine_path in selections:
+    for idx, (version_id, version_label, _engine_path) in enumerate(selections, 1):
 
+        check_cancel(on_check_cancel, on_log)
         on_log(f"[{version_label}] Mutating .uproject (EngineAssociation)...")
 
         # Prepare mutated .uproject bytes
@@ -260,13 +290,13 @@ def build_zip_set(
         mutated = build_mutated_uproject_bytes(
             original_uproject_path=uproject_path,
             engine_association=engine_association,
-            remove_plugins=remove_plugins,
             plugins_to_strip=plugins_to_strip
         )
         # Compute final name from pattern (with dots -> underscores already handled)
         final_base = _format_zip_basename(pattern, project_root, version_label)
         dst_zip = out_dir / f"{final_base}.zip"
 
+        check_cancel(on_check_cancel, on_log)
         on_log(f"[{version_label}] Writing final zip: {dst_zip.name}")
 
         if seven:
@@ -282,9 +312,6 @@ def build_zip_set(
         on_progress(percent)
 
         results.append(dst_zip)
-
-        # increment
-        idx += 1
 
     # Optionally remove the base zip to keep output clean
     try:

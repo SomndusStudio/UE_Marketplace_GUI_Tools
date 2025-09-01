@@ -1,13 +1,13 @@
 # profiles.py
 from __future__ import annotations
 
+import json
 import uuid
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional
-import json
+from typing import List, Dict, Tuple
 
-from src.path_helpers import get_catalog_path, get_profiles_dir, profile_path
+from src.core.path_helpers import get_catalog_path, get_profiles_dir, profile_path
 
 
 # ---------- Data models ----------
@@ -15,16 +15,18 @@ from src.path_helpers import get_catalog_path, get_profiles_dir, profile_path
 @dataclass(frozen=True)
 class AppVersion:
     """App-level version descriptor with a stable ID, display label, and default engine path."""
-    id: str              # e.g., "ue54"
-    label: str           # e.g., "UE 5.4"
-    engine_path: str     # default engine path from catalog
+    id: str  # e.g., "ue54"
+    label: str  # e.g., "UE 5.4"
+    engine_path: str  # default engine path from catalog
+
 
 @dataclass
 class ProfileVersionRef:
     """Profile mapping to an app version ID with optional engine path override and checked state."""
     version_id: str
-    engine_path: str = ""   # if empty, UI should fallback to catalog's engine_path
+    engine_path: str = ""  # if empty, UI should fallback to catalog's engine_path
     checked: bool = True
+
 
 @dataclass
 class Profile:
@@ -35,6 +37,8 @@ class Profile:
     zip_pattern: str
     versions: List[ProfileVersionRef]
     plugins_to_strip: List[str] = None
+    root_excludes: List[str] = None
+
 
 # ---------- Catalog API ----------
 
@@ -59,15 +63,18 @@ def load_versions_catalog() -> List[AppVersion]:
         seen.add(v.id)
     return out
 
+
 def catalog_by_id(catalog: List[AppVersion]) -> Dict[str, AppVersion]:
     """Map version_id -> AppVersion for quick lookups."""
     return {v.id: v for v in catalog}
+
 
 # ---------- Profiles API ----------
 
 def list_profile_names() -> List[str]:
     """List available profile names (without .json)."""
     return sorted([p.stem for p in get_profiles_dir().glob("*.json")])
+
 
 def default_profile() -> Profile:
     """Return in-memory default profile."""
@@ -79,12 +86,14 @@ def default_profile() -> Profile:
         versions=[],  # empty until user adds/migrates
     )
 
+
 def ensure_default_profile_exists() -> Path:
     """Create Default.json if missing and return its path."""
     p = profile_path("Default")
     if not p.exists():
         p.write_text(json.dumps(asdict(default_profile()), indent=2, ensure_ascii=False), encoding="utf-8")
     return p
+
 
 def load_profile(name: str) -> Profile:
     """Load a profile by name (fallback to Default)."""
@@ -106,7 +115,9 @@ def load_profile(name: str) -> Profile:
         zip_pattern=str(data.get("zip_pattern", "{project}_{ueversion}")),
         versions=refs,
         plugins_to_strip=list(data.get("plugins_to_strip", []) or []),
+        root_excludes=list(data.get("root_excludes", []) or []),
     )
+
 
 def save_profile(profile: Profile) -> Path:
     """Save a profile to <profiles>/<name>.json and return its path."""
@@ -114,17 +125,17 @@ def save_profile(profile: Profile) -> Path:
     p.write_text(json.dumps(asdict(profile), indent=2, ensure_ascii=False), encoding="utf-8")
     return p
 
+
 # ---------- Join / merge helpers ----------
 
 def resolve_profile_versions_for_ui(
-    profile: Profile,
-    catalog: List[AppVersion],
+        profile: Profile,
+        catalog: List[AppVersion],
 ) -> List[Tuple[AppVersion, ProfileVersionRef]]:
     """
     Join profile refs with catalog to get display info.
     For each catalog version, return (AppVersion, ProfileVersionRef or a synthetic default ref).
     """
-    by_id = catalog_by_id(catalog)
     pref_by_id: Dict[str, ProfileVersionRef] = {ref.version_id: ref for ref in profile.versions}
     out: List[Tuple[AppVersion, ProfileVersionRef]] = []
 
@@ -136,11 +147,12 @@ def resolve_profile_versions_for_ui(
         out.append((appv, ref))
     return out
 
+
 def upsert_profile_version(
-    profile: Profile,
-    version_id: str,
-    engine_path: str,
-    checked: bool = True,
+        profile: Profile,
+        version_id: str,
+        engine_path: str,
+        checked: bool = True,
 ) -> None:
     """Add or update a version ref in the profile by version_id."""
     for ref in profile.versions:
@@ -149,6 +161,7 @@ def upsert_profile_version(
             ref.checked = checked
             return
     profile.versions.append(ProfileVersionRef(version_id=version_id, engine_path=engine_path, checked=checked))
+
 
 def rename_profile(old_name: str, new_name: str) -> Path:
     """Rename a profile JSON file and return the new path.
@@ -169,8 +182,8 @@ def rename_profile(old_name: str, new_name: str) -> Path:
     if same_ignoring_case and old_p != new_p:
         # temp hop: <name>.tmp-<uuid>.json
         tmp_p = old_p.with_name(f"{old_p.stem}.tmp-{uuid.uuid4().hex}{old_p.suffix}")
-        old_p.rename(tmp_p)   # step 1
-        tmp_p.rename(new_p)   # step 2
+        old_p.rename(tmp_p)  # step 1
+        tmp_p.rename(new_p)  # step 2
     else:
         old_p.rename(new_p)
 
