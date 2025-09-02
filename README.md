@@ -2,7 +2,8 @@
 
 A lightweight utility to package Unreal Engine 5 project templates into zip archives, with version switching and plugin exclusion support.
 
----
+
+![UEFabZipTools screenshot](resources/app_gui_overview.png)
 
 ## Installation
 
