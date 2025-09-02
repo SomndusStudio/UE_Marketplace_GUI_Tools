@@ -1,0 +1,8 @@
+/* Theme variables (light) */
+$text_foreground: #8a95aa;
+$form_radius: 8px;
+$form_bg_color: #1b1e23;
+$form_bg_color_hover: #21252d;
+$form_bg_color_pressed: #272c36;
+
+@import "../style.qsspp";

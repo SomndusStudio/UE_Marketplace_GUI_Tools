@@ -60,7 +60,7 @@ pip install pyinstaller
 Build a single-file Windows executable:
 
 ```bash
-pyinstaller src\main.py --name UEFabZipTools --onefile --noconsole --icon=assets/app.ico
+pyinstaller src\main.py --name UEFabZipTools --onefile --noconsole --icon=assets/app.ico --add-data "settings.json;."
 ```
 
 The output executable will be located in the `dist/` folder.

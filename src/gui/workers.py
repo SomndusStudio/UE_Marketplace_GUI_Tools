@@ -11,7 +11,7 @@ from PySide6.QtCore import QObject, Signal, Slot, QThread, Qt
 
 # Import your build orchestrator and the cancel helper
 from src.core.builder import build_zip_set
-from src.gui.ui_bridge import UiBridge
+from src.gui.page_one.ui_bridge import UiBridge
 
 
 @dataclass(frozen=True)
@@ -57,7 +57,6 @@ class BuildWorker(QObject):
                 pattern=self._params.pattern,
                 selections=self._params.selections,
                 seven_zip=self._params.seven_zip_path,
-                remove_plugins=True,
                 plugins_to_strip=self._params.plugins_to_strip,
                 excludes=self._params.root_excludes,
                 # wire callbacks to Qt signals

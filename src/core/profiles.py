@@ -125,6 +125,13 @@ def save_profile(profile: Profile) -> Path:
     p.write_text(json.dumps(asdict(profile), indent=2, ensure_ascii=False), encoding="utf-8")
     return p
 
+def remove_profile(name: str) -> bool:
+    """Remove a profile JSON file by name. Returns True if deleted, False if not found."""
+    p = profile_path(name)
+    if p.exists():
+        p.unlink()  # delete the file
+        return True
+    return False
 
 # ---------- Join / merge helpers ----------
 

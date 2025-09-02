@@ -1,0 +1,42 @@
+#pod_bg_app {
+    background-color: $bg_one;
+    border-radius: 10;
+    border: 2px solid #343b48;
+}
+QFrame {
+    color: $text_foreground;
+    font: $default_font_size $font_family;
+}
+
+#title_bar_bg_frame {
+    background-color: $bg_two; border-radius: $common_radius;
+}
+
+#title_bar_label {
+    font: 11pt $font_family;
+    font-weight: bold;
+}
+
+#left_menu_bg_frame {
+    background-color: $dark_one; border-radius: $common_radius;
+}
+
+#central_widget, #central_widget * {
+    color: $text_foreground;
+    font: $default_font_size $font_family;
+}
+
+#label_tooltip, #label_tooltip QLabel {
+    background-color: $dark_one;
+    color: $text_foreground;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 17px;
+    border: 0px solid transparent;
+    border-left: 3px solid $context_color;
+    font: 800 $default_font_size $font_family;
+}
+
+#frame_div {
+    background: $dark_four;
+}

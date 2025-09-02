@@ -961,10 +961,10 @@ qt_resource_struct = b"\
 \x00\x00\x01\x99\x07,\xa9\xd9\
 "
 
-def qInitResources():
+def q_init_resources():
     QtCore.qRegisterResourceData(0x03, qt_resource_struct, qt_resource_name, qt_resource_data)
 
-def qCleanupResources():
+def q_cleanup_resources():
     QtCore.qUnregisterResourceData(0x03, qt_resource_struct, qt_resource_name, qt_resource_data)
 
-qInitResources()
+q_init_resources()

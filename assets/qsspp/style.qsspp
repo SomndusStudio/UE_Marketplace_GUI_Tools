@@ -1,0 +1,387 @@
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ScrollBars */
+QScrollBar:horizontal {
+    border: none;
+    background: $scroll_bar_bg_color;
+    height: 8px;
+    margin: 0px 21px 0 21px;
+	border-radius: 0px;
+}
+QScrollBar::handle:horizontal {
+    background: $form_context_color;
+    min-width: 25px;
+	border-radius: 4px
+}
+QScrollBar::add-line:horizontal {
+    border: none;
+    background: $scroll_bar_btn_color;
+    width: 20px;
+	border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:horizontal {
+    border: none;
+    background: $scroll_bar_btn_color;
+    width: 20px;
+	border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
+{
+     background: none;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
+{
+     background: none;
+}
+QScrollBar:vertical {
+	border: none;
+    background: $scroll_bar_bg_color;
+    width: 8px;
+    margin: 21px 0 21px 0;
+	border-radius: 0px;
+}
+QScrollBar::handle:vertical {	
+	background: $form_context_color;
+    min-height: 25px;
+	border-radius: 4px
+}
+QScrollBar::add-line:vertical {
+     border: none;
+    background: $scroll_bar_btn_color;
+     height: 20px;
+	border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+     subcontrol-position: bottom;
+     subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
+	border: none;
+    background: $scroll_bar_btn_color;
+     height: 20px;
+	border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+     subcontrol-position: top;
+     subcontrol-origin: margin;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+     background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+     background: none;
+}
+
+/* ------------------------------------------------------------------------- */
+/* Buttons */
+QPushButton {
+	border: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 30px;
+    color: $text_foreground;
+	border-radius: $form_radius;
+	background-color: $form_bg_color;
+}
+QPushButton:hover {
+	background-color: $form_bg_color_hover;
+}
+QPushButton:pressed {
+	background-color: $form_bg_color_pressed;
+}
+
+/* Disabled */
+QPushButton:disabled {
+    background-color: $text_foreground_disabled;
+    color: $form_bg_color_disabled;
+}
+
+/* ------------------------------------------------------------------------- */
+/* Line Edit */
+QLineEdit {
+	background-color: $form_bg_color;
+	border-radius: $form_radius;
+	border: $form_border_size solid transparent;
+	padding-left: 10px;
+    padding-right: 10px;
+    min-height: 30px;
+	selection-color: $selection_color;
+	selection-background-color: $form_context_color;
+    color: $text_foreground;
+}
+QLineEdit:focus {
+	border: $form_border_size solid $form_context_color;
+    background-color: $form_bg_color_active;
+}
+
+/* ------------------------------------------------------------------------- */
+/* ComboBox */
+QComboBox {
+    border: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 30px;
+    color: $text_foreground;
+    border-radius: $form_radius;
+    background-color: $form_bg_color;
+}
+
+/* Quand la souris survole */
+QComboBox:hover {
+    background-color: $form_bg_color_hover;
+}
+
+/* Quand la combo est "pressée" (menu déroulé) */
+QComboBox:pressed,
+QComboBox:focus {
+    background-color: $form_bg_color_pressed;
+}
+
+/* Style de la flèche de la combo */
+QComboBox::drop-down {
+    border: none;
+    width: 25px;
+}
+
+QComboBox::down-arrow {
+    image: url(down_arrow_icon.svg); /* change le chemin si tu as une icône */
+    width: 12px;
+    height: 12px;
+}
+
+/* Style de la liste déroulante */
+QComboBox QAbstractItemView {
+    border: none;
+    outline: 0;
+    color: $text_foreground;
+    background-color: $form_bg_color;
+    selection-background-color: $form_bg_color_hover;
+}
+
+/* ------------------------------------------------------------------------- */
+/* ListView */
+QListView {
+    border: none;
+    padding: 5px;
+    color: $text_foreground;
+    background-color: $form_bg_color;
+    border-radius: $form_radius;
+    outline: 0; /* Supprime le contour bleu de focus */
+}
+
+QListView::item {
+    min-height: 30px;
+    padding-left: 10px;
+    padding-right: 5px;
+    border-radius: $form_radius;
+}
+
+QListView::item:hover {
+    background-color: $form_bg_color_hover;
+}
+
+QListView::item:selected {
+    background-color: $form_bg_color_pressed;
+    color: $text_foreground;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* QProgressBar */
+QProgressBar {
+    border: none;
+    text-align: center; /* Center the text inside */
+    min-height: 20px;
+    color: $text_foreground_strong;
+    font-weight: 900;
+    background-color: $form_bg_color; /* Background of the bar */
+    border-radius: $form_radius;
+}
+
+/* The filled part of the progress bar */
+QProgressBar::chunk {
+    border-radius: $form_radius;
+    background-color: $form_context_color; /* Filled color */
+}
+
+/* ------------------------------------------------------------------------- */
+/* QPlainTextEdit */
+QPlainTextEdit {
+    border: none;
+    padding: 8px;
+    color: $text_foreground; /* Text color */
+    background-color: $form_bg_color; /* Background color */
+    border-radius: $form_radius;
+    selection-background-color: $form_bg_color_pressed; /* Selected text background */
+    selection-color: $text_foreground; /* Selected text color */
+}
+
+/* When focused */
+QPlainTextEdit:focus {
+    background-color: $form_bg_color_hover; /* Slightly different to indicate focus */
+}
+
+/* ------------------------------------------------------------------------- */
+/* QGroupBox */
+QGroupBox {
+    border: none;
+    border-radius: $form_radius;
+    margin-top: 20px; /* Space for the title */
+    background-color: $background_panel;
+    color: $text_foreground; /* Title color */
+    padding: 5px;
+}
+
+/* Title position */
+QGroupBox::title {
+    font-weight: 900;
+    subcontrol-origin: margin;
+    subcontrol-position: top left; /* Title at the top left */
+    padding-left: 10px;
+    padding-right: 5px;
+    background-color: transparent; /* Keep background clean */
+}
+
+/* Hover effect on the box */
+QGroupBox:hover {
+    background-color: $form_bg_color_hover;
+}
+
+/* When the groupbox is checked (if checkable) */
+QGroupBox::indicator:checked {
+    background-color: $form_bg_color_pressed;
+    border-radius: $form_radius;
+}
+
+/* ------------------------------------------------------------------------- */
+/* QGroupBox */
+QCheckBox {
+    spacing: 8px; /* Space between box and text */
+    color: $text_foreground;
+    background-color: transparent;
+}
+
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: $form_radius;
+    background-color: $form_bg_color; /* Unchecked background */
+    border: none;
+}
+
+/* When hovered */
+QCheckBox::indicator:hover {
+    background-color: $form_bg_color_hover;
+}
+
+/* When checked */
+QCheckBox::indicator:checked {
+    background-color: $form_bg_color_pressed;
+    image: url(check_icon.svg); /* Replace with your checkmark icon */
+}
+
+/* When partially checked (tri-state) */
+QCheckBox::indicator:indeterminate {
+    background-color: $form_bg_color_hover;
+    image: url(minus_icon.svg); /* Replace with your minus icon */
+}
+
+/* ------------------------------------------------------------------------- */
+/* ListView item check */
+/* Applies to all item views that can show checkboxes (ListView, TreeView, TableView) */
+QTreeView::indicator,
+QListView::indicator,
+QTableView::indicator {
+    width: 13px;
+    height: 13px;
+    border-radius: 2px;
+    background-color: $checkbox_bg_color; /* Unchecked background */
+    border: none;
+}
+
+/* Hovered state */
+QTreeView::indicator:hover,
+QListView::indicator:hover,
+QTableView::indicator:hover {
+    background-color: $checkbox_bg_color_hover;
+}
+
+/* Checked state */
+QTreeView::indicator:checked,
+QListView::indicator:checked,
+QTableView::indicator:checked {
+    background-color: $checkbox_bg_color_pressed;
+    image: url(check_icon.svg); /* Or remove if you want only color */
+}
+
+/* Partially checked (tri-state) */
+QTreeView::indicator:indeterminate,
+QListView::indicator:indeterminate,
+QTableView::indicator:indeterminate {
+    background-color: $form_bg_color_hover;
+    image: url(minus_icon.svg);
+}
+
+/* ------------------------------------------------------------------------- */
+/* QDialog */
+/* ------------------------------------------------------------------------- */
+/* Dialog */
+QDialog {
+    background-color: $background_panel;   /* Dark background */
+    color: $text_foreground;            /* Default text */
+    border-radius: $form_radius;
+    padding: 10px;
+}
+
+/* Labels inside dialog */
+QDialog QLabel {
+    color: $text_foreground;
+}
+
+/* LineEdits inside dialog */
+QDialog QLineEdit {
+    border: none;
+    padding: 6px 8px;
+    border-radius: $form_radius;
+    background-color: $form_bg_color_hover;
+    color: $text_foreground;
+    selection-background-color: $form_bg_color_pressed;
+}
+
+/* Buttons inside dialog */
+QDialog QPushButton {
+    border: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 30px;
+    color: $text_foreground;
+    border-radius: $form_radius;
+    background-color: $form_bg_color;
+}
+QDialog QPushButton:hover {
+    background-color: $form_bg_color_hover;
+}
+QDialog QPushButton:pressed {
+    background-color: $form_bg_color_pressed;
+}
+QDialog QPushButton:disabled {
+    background-color: $form_bg_color_disabled;
+    color: $text_foreground_disabled;
+    opacity: 0.6;
+}
+
+#bg_frame {
+    border-radius: 8px;
+    background-color: $dark_two;
+}
+
+#bg_frame QLabel {
+    font: $default_font_size $font_family;
+    color: $copyright_color;
+    padding-left: 10px;
+    padding-right: 10px;
+}

@@ -35,7 +35,7 @@ def load_ue_versions(json_path: Path) -> list[UEVersion]:
     return out
 
 
-def build_zip_preview(pattern: str, template_dir: str, version_label: str, version_id: str) -> str:
+def build_zip_preview(pattern: str, template_dir: str, version_label: str) -> str:
     """Build a preview filename from the naming pattern."""
     # project = last folder name of the UE project root
     project = Path(template_dir).name or "Project"

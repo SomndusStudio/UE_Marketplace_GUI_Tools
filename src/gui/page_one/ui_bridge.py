@@ -25,7 +25,7 @@ class UiBridge(QObject):
         )
 
     @Slot(list)
-    def finished(self, paths: list):
+    def finished(self):
         QMetaObject.invokeMethod(
             self.ui.progressBar, "setValue",
             Qt.QueuedConnection,

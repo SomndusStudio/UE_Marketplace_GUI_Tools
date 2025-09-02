@@ -27,7 +27,6 @@ class VersionPreviewDelegate(QStyledItemDelegate):
 
         # Compute rect for preview: start after the checkbox and label baseline
         main_text = index.data(Qt.DisplayRole) or ""
-        main_width = fm.horizontalAdvance(main_text)
 
         # Rough offset: checkbox width (approx 20) + text width
         x_offset = option.rect.x() + 120 + fm.horizontalAdvance(main_text) + 8
@@ -47,7 +46,7 @@ class VersionPreviewDelegate(QStyledItemDelegate):
         painter.setFont(f)
 
         elided = fm.elidedText(preview, Qt.ElideMiddle, rect.width())
-        painter.drawText(rect, Qt.AlignVCenter | Qt.AlignLeft, elided)
+        painter.drawText(rect, Qt.AlignmentFlag.AlignVCenter | Qt.AlignLeft, elided)
         painter.restore()
 
     def sizeHint(self, option, index) -> QSize:

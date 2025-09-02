@@ -234,7 +234,6 @@ def build_zip_set(
         selections: Sequence[Tuple[str, str, str]],
         # selections: list of (version_id, version_label, engine_path)
         seven_zip: Optional[Path] = None,
-        remove_plugins: bool = True,
         excludes: set[str] | None = None,  # default None,
         plugins_to_strip=set[str],
         on_log: Optional[Callable[[str], None]] = None,
@@ -251,6 +250,12 @@ def build_zip_set(
     # Start Progress 0%
     on_log("Starting build...")
     on_progress(0)
+
+    # Log build parameters
+    version_labels = [label for _, label, _ in selections]
+    on_log(f"Selected versions: {version_labels}")
+    on_log(f"Plugins to strip: {plugins_to_strip}")
+    on_log(f"Excluded files/folders: {excludes}")
 
     project_root = project_root.resolve()
     out_dir = out_dir.resolve()

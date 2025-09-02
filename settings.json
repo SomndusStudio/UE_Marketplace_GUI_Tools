@@ -1,0 +1,35 @@
+{
+    "app_name": "UE Fab Zip Tools (Somndus Studio)",
+    "version" : "v0.3.0",
+    "copyright" : "Copyright © SCHARTIER Isaac trading as Somndus Studio",
+    "year" : 2025,
+    "theme_name" : "default",
+    "custom_title_bar": true,
+    "startup_size": [
+        1400,
+        950
+    ],
+    "minimum_size": [
+        960,
+        540
+    ],
+    "lef_menu_size" : {
+        "minimum" : 50,
+        "maximum" : 240
+    },
+    "left_menu_content_margins" : 3,
+    "left_column_size" : {
+        "minimum" : 0,
+        "maximum" : 240
+    },
+    "right_column_size" : {
+        "minimum" : 0,
+        "maximum" : 240
+    },
+    "time_animation" : 500,
+    "font" : {
+        "family" : "Segoe UI",
+        "title_size" : 10,
+        "text_size" : 9
+    }
+}

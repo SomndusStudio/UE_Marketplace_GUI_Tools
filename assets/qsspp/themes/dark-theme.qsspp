@@ -1,0 +1,42 @@
+/* Theme variables (dark) */
+$default_font_size: 9pt;
+$font_family: 'Segoe UI';
+
+$copyright_color: #85888C;
+
+$dark_one: #1b1e23;
+$dark_two: #1e2229;
+$dark_three: #21252d;
+$dark_four: #272c36;
+
+$bg_one: #2c313c;
+$bg_two: #343b48;
+$bg_three: #3c4454;
+
+$common_radius: 8px;
+$context_color: #568af2;
+
+$background_panel: #343b48;
+$text_foreground: #8a95aa;
+$text_foreground_strong: #FFFFFF;
+$text_foreground_disabled: #5a6270;
+$form_radius: 8px;
+$form_border_size: 2px;
+$form_bg_color: #1b1e23;
+$form_bg_color_disabled: #2a2e35;
+$form_bg_color_hover: #21252d;
+$form_bg_color_pressed: #272c36;
+$form_bg_color_active: #21252d;
+
+$form_context_color: #568af2;
+$selection_color: #f5f6f9;
+
+$scroll_bar_bg_color: $bg_one;
+$scroll_bar_btn_color: $dark_four;
+
+$checkbox_bg_color: #666A73;
+$checkbox_bg_color_hover: #93BFBF;
+$checkbox_bg_color_pressed: #568af2;
+
+@import "../base.qsspp";
+@import "../style.qsspp";
