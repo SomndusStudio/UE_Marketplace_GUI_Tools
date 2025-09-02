@@ -25,7 +25,7 @@ class BuildSelection:
 # --------------------------- Helpers ------------------------------- #
 
 DEFAULT_EXCLUDES: tuple[str, ...] = (
-    "Binaries", "Build", "Intermediate", "Saved", "DerivedDataCache",
+    "Binaries", "Build", "Intermediate", "Saved", "DerivedDataCache", "Content/Developers", "Content/Collections",
     ".git", ".gitattributes", ".gitignore", ".github", ".gitlab", ".vs", ".idea", "__pycache__",
 )
 
