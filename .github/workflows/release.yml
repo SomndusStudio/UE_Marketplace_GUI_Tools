@@ -29,11 +29,7 @@ jobs:
 
       - name: Build exe with PyInstaller
         run: |
-          pyinstaller src\main.py `
-            --name UEFabZipTools `
-            --onefile `
-            --noconsole `
-            --icon=assets/app.ico
+          pyinstaller --noconfirm --clean UEFabZipTools.spec
 
       - name: Prepare release bundle
         shell: pwsh
