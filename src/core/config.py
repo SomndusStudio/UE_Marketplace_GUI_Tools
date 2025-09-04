@@ -51,10 +51,9 @@ def load_app_config() -> dict:
     return dict(DEFAULT_APP_CONFIG)
 
 
-def get_seven_zip_path() -> Path:
+def get_seven_zip_path(context) -> Path:
     """Return the 7z executable path configured by the user (or resolve via PATH)."""
-    cfg = load_app_config()
-    raw = cfg.get("seven_zip_path", "7z")
+    raw = context.ui.cfg.get("seven_zip_path", "7z")
     p = Path(raw)
 
     # If user provided a real file path, use it

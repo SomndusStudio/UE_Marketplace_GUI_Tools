@@ -33,6 +33,7 @@ from . py_div import PyDiv
 # IMPORT BUTTON
 # ///////////////////////////////////////////////////////////////
 from . py_title_button import PyTitleButton
+from ...core.theme import Theme
 
 # GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -52,47 +53,22 @@ class PyTitleBar(QWidget):
         self,
         parent,
         app_parent,
+        theme: Theme,
         logo_image = "logo_top_100x22.svg",
         logo_width = 150,
-        dark_one = "#1b1e23",
-        bg_color = "#343b48",
-        div_color = "#3c4454",
-        btn_bg_color = "#343b48",
-        btn_bg_color_hover = "#3c4454",
-        btn_bg_color_pressed = "#2c313c",
-        icon_color = "#c3ccdf",
-        icon_color_hover = "#dce1ec",
-        icon_color_pressed = "#edf0f5",
-        icon_color_active = "#f5f6f9",
-        context_color = "#6c99f4",
-        text_foreground = "#8a95aa",
-        font_family = "Segoe UI",
-        title_size = 10,
         is_custom_title_bar = True,
     ):
         super().__init__()
+
+        self.theme = theme
 
         settings = Settings()
         self.settings = settings.items
 
         # PARAMETERS
         self._logo_image = logo_image
-        self._dark_one = dark_one
-        self._bg_color = bg_color
-        self._div_color = div_color
         self._parent = parent
         self._app_parent = app_parent
-        self._btn_bg_color = btn_bg_color
-        self._btn_bg_color_hover = btn_bg_color_hover
-        self._btn_bg_color_pressed = btn_bg_color_pressed  
-        self._context_color = context_color
-        self._icon_color = icon_color
-        self._icon_color_hover = icon_color_hover
-        self._icon_color_pressed = icon_color_pressed
-        self._icon_color_active = icon_color_active
-        self._font_family = font_family
-        self._title_size = title_size
-        self._text_foreground = text_foreground
         self._is_custom_title_bar = is_custom_title_bar
 
         # SETUP UI
@@ -171,16 +147,9 @@ class PyTitleBar(QWidget):
                 self.menu = PyTitleButton(
                     self._parent,
                     self._app_parent,
+                    theme=self.theme,
                     btn_id = _btn_id,
                     tooltip_text = _btn_tooltip,
-                    bg_color = self._bg_color,
-                    bg_color_hover = self._btn_bg_color_hover,
-                    bg_color_pressed = self._btn_bg_color_pressed,
-                    icon_color = self._icon_color,
-                    icon_color_hover = self._icon_color_active,
-                    icon_color_pressed = self._icon_color_pressed,
-                    icon_color_active = self._icon_color_active,
-                    context_color = self._context_color,
                     icon_path = _btn_icon,
                     is_active = _is_active
                 )
@@ -257,9 +226,9 @@ class PyTitleBar(QWidget):
         self.bg_layout.setSpacing(0)
 
         # DIVS
-        self.div_1 = PyDiv(self._div_color)
-        self.div_2 = PyDiv(self._div_color)
-        self.div_3 = PyDiv(self._div_color)
+        self.div_1 = PyDiv()
+        self.div_2 = PyDiv()
+        self.div_3 = PyDiv()
 
         # LEFT FRAME WITH MOVE APP
         self.top_logo = QLabel()
@@ -286,16 +255,8 @@ class PyTitleBar(QWidget):
         self.minimize_button = PyTitleButton(
             self._parent,
             self._app_parent,
+            theme=self.theme,
             tooltip_text = "Close app",
-            bg_color = self._btn_bg_color,
-            bg_color_hover = self._btn_bg_color_hover,
-            bg_color_pressed = self._btn_bg_color_pressed,
-            icon_color = self._icon_color,
-            icon_color_hover = self._icon_color_hover,
-            icon_color_pressed = self._icon_color_pressed,
-            icon_color_active = self._icon_color_active,
-            context_color = self._context_color,
-            radius = 6,
             icon_path = Functions.set_svg_icon("icon_minimize.svg")
         )
 
@@ -303,16 +264,8 @@ class PyTitleBar(QWidget):
         self.maximize_restore_button = PyTitleButton(
             self._parent,
             self._app_parent,
+            theme=self.theme,
             tooltip_text = "Maximize app",
-            bg_color = self._btn_bg_color,
-            bg_color_hover = self._btn_bg_color_hover,
-            bg_color_pressed = self._btn_bg_color_pressed,
-            icon_color = self._icon_color,
-            icon_color_hover = self._icon_color_hover,
-            icon_color_pressed = self._icon_color_pressed,
-            icon_color_active = self._icon_color_active,
-            context_color = self._context_color,
-            radius = 6,
             icon_path = Functions.set_svg_icon("icon_maximize.svg")
         )
 
@@ -320,16 +273,8 @@ class PyTitleBar(QWidget):
         self.close_button = PyTitleButton(
             self._parent,
             self._app_parent,
+            theme=self.theme,
             tooltip_text = "Close app",
-            bg_color = self._btn_bg_color,
-            bg_color_hover = self._btn_bg_color_hover,
-            bg_color_pressed = self._context_color,
-            icon_color = self._icon_color,
-            icon_color_hover = self._icon_color_hover,
-            icon_color_pressed = self._icon_color_active,
-            icon_color_active = self._icon_color_active,
-            context_color = self._context_color,
-            radius = 6,
             icon_path = Functions.set_svg_icon("icon_close.svg")
         )
 

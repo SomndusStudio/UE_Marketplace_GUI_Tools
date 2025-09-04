@@ -43,9 +43,6 @@ class PyWindow(QFrame):
             layout=Qt.Vertical,
             margin=0,
             spacing=2,
-            bg_color="#2c313c",
-            text_color="#fff",
-            text_font="9pt 'Segoe UI'",
             border_radius=10,
             border_size=2,
             border_color="#343b48",
@@ -63,9 +60,6 @@ class PyWindow(QFrame):
         self.parent = parent
         self.layout = layout
         self.margin = margin
-        self.bg_color = bg_color
-        self.text_color = text_color
-        self.text_font = text_font
         self.border_radius = border_radius
         self.border_size = border_size
         self.border_color = border_color

@@ -1,8 +1,98 @@
-/* Theme variables (light) */
-$text_foreground: #8a95aa;
-$form_radius: 8px;
-$form_bg_color: #1b1e23;
-$form_bg_color_hover: #21252d;
-$form_bg_color_pressed: #272c36;
+/* TODO : Should split some var for better control in light theme : Theme variables (light) */
+$default_font_size: 9pt;
+$font_family: 'Segoe UI';
 
+$copyright_color: #7a7a7a;
+
+$dark_one: #1b1e23;
+$dark_two: #1e2229;
+$dark_three: #21252d;
+$dark_four: #272c36;
+
+$bg_one: #D3E0F7;
+$bg_two: #E2E9F7;
+$bg_three: #EFF1F7;
+
+$icon_color: #6C7C96;
+$icon_hover: #8CB8FF;
+$icon_pressed: #6c99f4;
+$icon_active: #8CB8FF;
+
+$common_radius: 8px;
+$context_color: #568af2;
+$context_hover : #6c99f4;
+$context_pressed : #4B5469;
+
+$text_title : #606C85;
+$text_foreground : #6B7894;
+$text_description : #7887A6;
+$text_active : #8797BA;
+
+$background_panel: $bg_two;
+$text_foreground: #7887A6;
+$text_foreground_strong: #000000;
+$text_foreground_disabled: #9e9e9e;
+$form_radius: 8px;
+$form_border_size: 2px;
+
+/* Buttons – light theme, bleu sobre */
+$btn_bg_color: #568AF2;
+$btn_bg_color_hover: #6C99F4;
+$btn_bg_color_pressed: #4A7AE0;
+$btn_bg_color_active: #3D6FD1;
+$btn_bg_color_disabled: #B0C4E5;
+
+$form_bg_color: #FFFFFF;
+$form_bg_color_hover: #F3F6FC;
+$form_bg_color_pressed: #E0EDFF;
+$form_bg_color_active: #E0EDFF;
+$form_bg_color_focus: #E0EDFF;
+$form_bg_color_disabled: #F5F5F5;
+
+$button_text: #FFFFFF;
+
+/* Combo box variables */
+$combobox_bg: #FFFFFF;
+$combobox_bg_hover: #F3F6FC;
+$combobox_bg_focus: #E0EDFF;
+
+$combobox_border: #C0D3F0;
+$combobox_border_hover: #98BAE8;
+$combobox_border_focus: #568AF2;
+
+$combobox_popup_bg: #FFFFFF;
+
+$combobox_item_hover: #E3ECFB;
+$combobox_item_text: #1F2A44;
+
+/* list view */
+$listview_bg: #FFFFFF;
+
+$listview_item_text: #1F2A44;
+$listview_item_hover_bg: #F0F6FF;
+$listview_item_selected_bg: #D6E5FF;
+$listview_item_selected_text: #1F2A44;
+
+/* scroll */
+$scroll_bar_bg_pin_color: $bg_one;
+$scroll_bar_bg_color: $bg_one;
+$scroll_bar_btn_color: $dark_four;
+
+/* checkbox */
+$checkbox_bg_color: #cccccc;
+$checkbox_bg_color_hover: #93BFBF;
+$checkbox_bg_color_pressed: #568af2;
+
+/* title bar */
+$tbar_btn_bg_color: $bg_two;
+$tbar_btn_bg_color_hover: $bg_three;
+$tbar_btn_bg_color_pressed: $bg_one;
+
+/* other variables */
+$form_context_color: #568af2;
+$selection_color: #d0d7f6;
+
+$copyright_bg_color: $bg_two;
+
+@import "../base.qsspp";
 @import "../style.qsspp";

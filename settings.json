@@ -3,7 +3,6 @@
     "version" : "v0.3.0",
     "copyright" : "Copyright © SCHARTIER Isaac trading as Somndus Studio",
     "year" : 2025,
-    "theme_name" : "default",
     "custom_title_bar": true,
     "startup_size": [
         1400,

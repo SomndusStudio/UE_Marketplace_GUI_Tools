@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 
 from src.gui.page_one.folder_lists import selected_root_excludes
 from src.gui.page_one.plugin_lists import selected_plugins_to_strip
+from src.gui.windows.ui_main import UI_MainWindow
 from src.gui.workers import BuildParams, BuildWorker, BuildController
 from src.core.config import get_seven_zip_path
 from src.gui.page_one.ui_bridge import UiBridge
@@ -43,7 +44,7 @@ if TYPE_CHECKING:
 class AppContext:
     """Light-weight container passed to Actions to avoid circular imports."""
     main_window: MainWindow  # for dialogs/parent
-    ui: MainWindow  # Ui_MainWindow instance (has the widgets)
+    ui: UI_MainWindow  # Ui_MainWindow instance (has the widgets)
     versions_model: QStandardItemModel
     catalog: List[AppVersion]
 
@@ -327,7 +328,7 @@ class Actions(QObject):
             return
 
         # Get seven zip path from config
-        seven_zip_path = get_seven_zip_path()
+        seven_zip_path = get_seven_zip_path(self.ctx)
 
         # Guard clause: if seven_zip_path doesn't exist → show error and exit
         if not seven_zip_path.exists():

@@ -1,50 +1,11 @@
-# ///////////////////////////////////////////////////////////////
-#
-# BY: WANDERSON M.PIMENTA
-# PROJECT MADE WITH: Qt Designer and PySide6
-# V: 1.0.0
-#
-# This project can be used freely for all uses, as long as they maintain the
-# respective credits only in the Python scripts, any information in the visual
-# interface (GUI) can be modified without any implication.
-#
-# There are limitations on Qt licenses if you want to use your products
-# commercially, I recommend reading them on the official website:
-# https://doc.qt.io/qtforpython/licenses.html
-#
-# ///////////////////////////////////////////////////////////////
-
-# IMPORT PACKAGES AND MODULES
-# ///////////////////////////////////////////////////////////////
-
-# IMPORT QT CORE
-# ///////////////////////////////////////////////////////////////
+from src.core.config import load_app_config
 from src.core.qt_core import *
-
-# IMPORT SETTINGS
-# ///////////////////////////////////////////////////////////////
 from src.gui.core.json_settings import Settings
-
-# IMPORT THEME COLORS
-# ///////////////////////////////////////////////////////////////
-from src.gui.core.json_themes import Themes
-
-# IMPORT PY ONE DARK WIDGETS
-# ///////////////////////////////////////////////////////////////
+from src.gui.core.theme import Theme
 from src.gui.widgets import *
 
-# IMPORT SETUP MAIN WINDOW
-# ///////////////////////////////////////////////////////////////
-
-# IMPORT MAIN WINDOW PAGES / AND SIDE BOXES FOR APP
-# ///////////////////////////////////////////////////////////////
-from src.gui.windows.ui_main_pages import Ui_MainPages
-
-
-# CREDITS
-# ///////////////////////////////////////////////////////////////
 from src.gui.widgets.py_credits_bar.py_credits import PyCredits
-
+from src.gui.windows.ui_main_pages import Ui_MainPages
 
 # PY WINDOW
 # ///////////////////////////////////////////////////////////////
@@ -54,14 +15,13 @@ class UI_MainWindow(object):
             parent.setObjectName("MainWindow")
 
         # LOAD SETTINGS
-        # ///////////////////////////////////////////////////////////////
         settings = Settings()
         self.settings = settings.items
+        self.cfg = load_app_config()
 
-        # LOAD THEME COLOR
-        # ///////////////////////////////////////////////////////////////
-        themes = Themes()
-        self.themes = themes.items
+        # LOAD THEME
+        self.theme = Theme(base_dir=Settings.resource_path("assets"))
+        self.theme.load(self.cfg.get("theme", "dark"))
 
         # SET INITIAL PARAMETERS
         parent.resize(self.settings["startup_size"][0], self.settings["startup_size"][1])
@@ -82,10 +42,7 @@ class UI_MainWindow(object):
         # Add inside PyWindow "layout" all Widgets
         # ///////////////////////////////////////////////////////////////
         self.window = PyWindow(
-            parent,
-            bg_color=self.themes["app_color"]["bg_one"],
-            border_color=self.themes["app_color"]["bg_two"],
-            text_color=self.themes["app_color"]["text_foreground"]
+            parent
         )
 
         # If disable custom title bar
@@ -118,18 +75,8 @@ class UI_MainWindow(object):
         # ///////////////////////////////////////////////////////////////
         self.left_menu = PyLeftMenu(
             parent=self.left_menu_frame,
+            theme=self.theme,
             app_parent=self.central_widget,  # For tooltip parent
-            dark_one=self.themes["app_color"]["dark_one"],
-            dark_three=self.themes["app_color"]["dark_three"],
-            dark_four=self.themes["app_color"]["dark_four"],
-            bg_one=self.themes["app_color"]["bg_one"],
-            icon_color=self.themes["app_color"]["icon_color"],
-            icon_color_hover=self.themes["app_color"]["icon_hover"],
-            icon_color_pressed=self.themes["app_color"]["icon_pressed"],
-            icon_color_active=self.themes["app_color"]["icon_active"],
-            context_color=self.themes["app_color"]["context_color"],
-            text_foreground=self.themes["app_color"]["text_foreground"],
-            text_active=self.themes["app_color"]["text_active"]
         )
         self.left_menu_layout.addWidget(self.left_menu)
 
@@ -155,20 +102,8 @@ class UI_MainWindow(object):
         self.title_bar = PyTitleBar(
             parent,
             app_parent=self.central_widget,
+            theme=self.theme,
             logo_image="app_ico_top.png",
-            bg_color=self.themes["app_color"]["bg_two"],
-            div_color=self.themes["app_color"]["bg_three"],
-            btn_bg_color=self.themes["app_color"]["bg_two"],
-            btn_bg_color_hover=self.themes["app_color"]["bg_three"],
-            btn_bg_color_pressed=self.themes["app_color"]["bg_one"],
-            icon_color=self.themes["app_color"]["icon_color"],
-            icon_color_hover=self.themes["app_color"]["icon_hover"],
-            icon_color_pressed=self.themes["app_color"]["icon_pressed"],
-            icon_color_active=self.themes["app_color"]["icon_active"],
-            context_color=self.themes["app_color"]["context_color"],
-            dark_one=self.themes["app_color"]["dark_one"],
-            font_family=self.settings["font"]["family"],
-            title_size=self.settings["font"]["title_size"],
             is_custom_title_bar=self.settings["custom_title_bar"]
         )
         self.title_bar_layout.addWidget(self.title_bar)
@@ -210,12 +145,8 @@ class UI_MainWindow(object):
 
         # ADD CUSTOM WIDGET CREDITS
         self.credits = PyCredits(
-            bg_two=self.themes["app_color"]["bg_two"],
             copyright=self.settings["copyright"],
-            version=self.settings["version"],
-            font_family=self.settings["font"]["family"],
-            text_size=self.settings["font"]["text_size"],
-            text_description_color=self.themes["app_color"]["text_description"]
+            version=self.settings["version"]
         )
 
         #  ADD TO LAYOUT

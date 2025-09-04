@@ -40,3 +40,34 @@ QFrame {
 #frame_div {
     background: $dark_four;
 }
+
+#frame_div_secondary {
+    background: $bg_three;
+}
+
+/* ------------------------------------------------------------------------- */
+/* title_button */
+
+QPushButton#title_button {
+    width = 30px;
+    height = 30px;
+    padding: 0px;
+    qproperty-iconSize: 18px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: $tbar_btn_bg_color;
+    color: #000000;
+}
+
+QPushButton#title_button[active="true"] {
+    background-color: $context_color;
+}
+
+
+QPushButton#title_button:hover {
+    background-color: $tbar_btn_bg_color_hover;
+}
+
+QPushButton#title_button:pressed {
+    background-color: $tbar_btn_bg_color_pressed;
+}

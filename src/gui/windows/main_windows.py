@@ -4,6 +4,7 @@ import logging
 from PySide6.QtCore import QThreadPool, Qt, QSettings
 from PySide6.QtWidgets import QMainWindow
 
+from src.core.config import load_app_config
 from src.gui.core.json_settings import Settings
 from src.gui.windows.functions_main_window import MainFunctions
 from src.gui.windows.setup_main_window import SetupMainWindow
@@ -36,18 +37,15 @@ class MainWindow(QMainWindow):
         self.ui.setup_ui(self)
 
         # LOAD SETTINGS
-        # ///////////////////////////////////////////////////////////////
         settings = Settings()
         self.settings = settings.items
 
         self.app_settings = QSettings("somndus_studio", "UETemplatePackager")
 
         # SETUP MAIN WINDOW
-        # ///////////////////////////////////////////////////////////////
         self.hide_grips = True  # Show/Hide resize grips
         SetupMainWindow.setup_gui(self)
 
-        # ///////////////////////////////////////////////////////////////
         # Page One Setup
         self.page_one = SetupPageOne(self)
         self.page_one.setup_gui()
@@ -111,5 +109,3 @@ class MainWindow(QMainWindow):
     def mousePressEvent(self, event):
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPos()
-
-

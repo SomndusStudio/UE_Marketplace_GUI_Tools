@@ -5,7 +5,7 @@ a = Analysis(
     ['src\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[('settings.json', '.'), ('src/gui/themes', 'src/gui/themes'),('assets', 'assets'), ('assets/qss', 'assets/qss'),('assets/images/svg_icons', 'assets/images/svg_icons')],
+    datas=[('settings.json', '.'), ('assets', 'assets'), ('assets/qsspp', 'assets/qsspp'), ('assets/qss', 'assets/qss'),('assets/images/svg_icons', 'assets/images/svg_icons')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

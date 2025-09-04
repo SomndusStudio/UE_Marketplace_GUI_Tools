@@ -13,30 +13,86 @@ $bg_one: #2c313c;
 $bg_two: #343b48;
 $bg_three: #3c4454;
 
+$icon_color: #6C7C96;
+$icon_hover: #8CB8FF;
+$icon_pressed: #6c99f4;
+$icon_active: #8CB8FF;
+
 $common_radius: 8px;
 $context_color: #568af2;
+$context_hover : #6c99f4;
+$context_pressed : #3f6fd1;
 
-$background_panel: #343b48;
+$text_title : #dce1ec;
+$text_foreground : #8a95aa;
+$text_description : #4f5b6e;
+$text_active : #dce1ec;
+
+$background_panel: $bg_two;
 $text_foreground: #8a95aa;
 $text_foreground_strong: #FFFFFF;
 $text_foreground_disabled: #5a6270;
 $form_radius: 8px;
 $form_border_size: 2px;
-$form_bg_color: #1b1e23;
-$form_bg_color_disabled: #2a2e35;
+
+/* Buttons – light theme, bleu sobre */
+$btn_bg_color: $dark_one;
+$btn_bg_color_hover: #272c36;
+$btn_bg_color_pressed: #21252;
+$btn_bg_color_active: #21252d;
+$btn_bg_color_disabled: #2a2e35;
+
+$form_bg_color: $dark_one;
 $form_bg_color_hover: #21252d;
 $form_bg_color_pressed: #272c36;
 $form_bg_color_active: #21252d;
+$form_bg_color_focus: #21252d;
+$form_bg_color_disabled: #2a2e35;
 
-$form_context_color: #568af2;
-$selection_color: #f5f6f9;
+$button_text: #D9D9D9;
 
+/* Combo box variables */
+$combobox_bg: #21252d;
+$combobox_bg_hover: #272c36;
+$combobox_bg_focus: #2c313a;
+
+$combobox_border: #3A3F47;
+$combobox_border_hover: #4C5562;
+$combobox_border_focus: #568AF2;
+
+$combobox_popup_bg: #1b1e23;
+
+$combobox_item_hover: #2e3340;
+$combobox_item_text: #D8DEE9;
+
+/* list view */
+$listview_bg: #1b1e23;
+
+$listview_item_text: #D8DEE9;
+$listview_item_hover_bg: #2a2e35;
+$listview_item_selected_bg: #313641;
+$listview_item_selected_text: #FFFFFF;
+
+/* scroll */
+$scroll_bar_bg_pin_color: $bg_one;
 $scroll_bar_bg_color: $bg_one;
 $scroll_bar_btn_color: $dark_four;
 
+/* checkbox */
 $checkbox_bg_color: #666A73;
 $checkbox_bg_color_hover: #93BFBF;
 $checkbox_bg_color_pressed: #568af2;
+
+/* title bar */
+$tbar_btn_bg_color: $bg_two;
+$tbar_btn_bg_color_hover: $bg_three;
+$tbar_btn_bg_color_pressed: $bg_one;
+
+/* other variables */
+$form_context_color: #568af2;
+$selection_color: #d0d7f6;
+
+$copyright_bg_color: $bg_two;
 
 @import "../base.qsspp";
 @import "../style.qsspp";

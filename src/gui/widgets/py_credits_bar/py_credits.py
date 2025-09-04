@@ -25,24 +25,12 @@ class PyCredits(QWidget):
         self,
         copyright,
         version,
-        bg_two,
-        font_family,
-        text_size,
-        text_description_color,
-        radius = 8,
-        padding = 10
     ):
         super().__init__()
 
         # PROPERTIES
         self._copyright = copyright
         self._version = version
-        self._bg_two = bg_two
-        self._font_family = font_family
-        self._text_size = text_size
-        self._text_description_color = text_description_color
-        self._radius = radius
-        self._padding = padding
 
         # SETUP UI
         self.setup_ui()
@@ -72,7 +60,7 @@ class PyCredits(QWidget):
         self.version_label.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
         # SEPARATOR
-        self.separator = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.separator = QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         # ADD TO LAYOUT
         self.bg_layout.addWidget(self.copyright_label)

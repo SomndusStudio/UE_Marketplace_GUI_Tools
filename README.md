@@ -41,6 +41,17 @@ In practice, I don’t use `Editor.exe` — only 7-Zip.
 }
 ```
 
+## Theme
+
+You can switch between dark and light theme from app_config.json here :
+
+```json
+{
+  "theme": "light", // or dark
+  ...
+}
+```
+
 ## Command Reference
 
 ### Run the application
@@ -98,16 +109,12 @@ And I compile it with my tool using:
 ss-qssppc assets/qsspp/themes/dark-theme.qsspp -o assets/qss/style-dark.qss   
 ```
 
-Then in my app.py
+Then in my ui_main.py 
 
 ```py
-from src.gui.core.json_settings import Settings
-
-qss_path = Settings.resource_path("assets/qss/style-dark.qss")
-
-with open(qss_path, "r", encoding="utf-8") as f:
-    _style = f.read()
-    app.setStyleSheet(_style)
+# LOAD THEME
+self.theme = Theme(base_dir=Settings.resource_path("assets"))
+self.theme.load(self.cfg.get("theme", "dark"))
 ```
 
 ### Update translations
