@@ -29,8 +29,6 @@ def main():
     icon = QIcon(":/app.ico")
     app.setWindowIcon(icon)
 
-    #app.setStyle("Fusion")
-
     w = MainWindow()
     w.setWindowIcon(icon)
 

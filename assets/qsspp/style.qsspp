@@ -130,30 +130,26 @@ QComboBox {
     background-color: $form_bg_color;
 }
 
-/* Quand la souris survole */
 QComboBox:hover {
     background-color: $form_bg_color_hover;
 }
 
-/* Quand la combo est "pressée" (menu déroulé) */
 QComboBox:pressed,
 QComboBox:focus {
     background-color: $form_bg_color_pressed;
 }
 
-/* Style de la flèche de la combo */
 QComboBox::drop-down {
     border: none;
     width: 25px;
 }
 
 QComboBox::down-arrow {
-    image: url(down_arrow_icon.svg); /* change le chemin si tu as une icône */
+    image: url(down_arrow_icon.svg);
     width: 12px;
     height: 12px;
 }
 
-/* Style de la liste déroulante */
 QComboBox QAbstractItemView {
     border: none;
     outline: 0;
@@ -170,7 +166,7 @@ QListView {
     color: $text_foreground;
     background-color: $form_bg_color;
     border-radius: $form_radius;
-    outline: 0; /* Supprime le contour bleu de focus */
+    outline: 0;
 }
 
 QListView::item {
@@ -194,18 +190,18 @@ QListView::item:selected {
 /* QProgressBar */
 QProgressBar {
     border: none;
-    text-align: center; /* Center the text inside */
+    text-align: center;
     min-height: 20px;
     color: $text_foreground_strong;
     font-weight: 900;
-    background-color: $form_bg_color; /* Background of the bar */
+    background-color: $form_bg_color;
     border-radius: $form_radius;
 }
 
 /* The filled part of the progress bar */
 QProgressBar::chunk {
     border-radius: $form_radius;
-    background-color: $form_context_color; /* Filled color */
+    background-color: $form_context_color;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -213,16 +209,16 @@ QProgressBar::chunk {
 QPlainTextEdit {
     border: none;
     padding: 8px;
-    color: $text_foreground; /* Text color */
-    background-color: $form_bg_color; /* Background color */
+    color: $text_foreground;
+    background-color: $form_bg_color;
     border-radius: $form_radius;
-    selection-background-color: $form_bg_color_pressed; /* Selected text background */
-    selection-color: $text_foreground; /* Selected text color */
+    selection-background-color: $form_bg_color_pressed;
+    selection-color: $text_foreground;
 }
 
 /* When focused */
 QPlainTextEdit:focus {
-    background-color: $form_bg_color_hover; /* Slightly different to indicate focus */
+    background-color: $form_bg_color_hover;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -230,9 +226,9 @@ QPlainTextEdit:focus {
 QGroupBox {
     border: none;
     border-radius: $form_radius;
-    margin-top: 20px; /* Space for the title */
+    margin-top: 20px;
     background-color: $background_panel;
-    color: $text_foreground; /* Title color */
+    color: $text_foreground;
     padding: 5px;
 }
 
@@ -240,10 +236,10 @@ QGroupBox {
 QGroupBox::title {
     font-weight: 900;
     subcontrol-origin: margin;
-    subcontrol-position: top left; /* Title at the top left */
+    subcontrol-position: top left;
     padding-left: 10px;
     padding-right: 5px;
-    background-color: transparent; /* Keep background clean */
+    background-color: transparent;
 }
 
 /* Hover effect on the box */
@@ -260,7 +256,7 @@ QGroupBox::indicator:checked {
 /* ------------------------------------------------------------------------- */
 /* QGroupBox */
 QCheckBox {
-    spacing: 8px; /* Space between box and text */
+    spacing: 8px;
     color: $text_foreground;
     background-color: transparent;
 }
@@ -269,7 +265,7 @@ QCheckBox::indicator {
     width: 18px;
     height: 18px;
     border-radius: $form_radius;
-    background-color: $form_bg_color; /* Unchecked background */
+    background-color: $form_bg_color;
     border: none;
 }
 
@@ -281,13 +277,13 @@ QCheckBox::indicator:hover {
 /* When checked */
 QCheckBox::indicator:checked {
     background-color: $form_bg_color_pressed;
-    image: url(check_icon.svg); /* Replace with your checkmark icon */
+    image: url(check_icon.svg);
 }
 
 /* When partially checked (tri-state) */
 QCheckBox::indicator:indeterminate {
     background-color: $form_bg_color_hover;
-    image: url(minus_icon.svg); /* Replace with your minus icon */
+    image: url(minus_icon.svg);
 }
 
 /* ------------------------------------------------------------------------- */
@@ -299,7 +295,7 @@ QTableView::indicator {
     width: 13px;
     height: 13px;
     border-radius: 2px;
-    background-color: $checkbox_bg_color; /* Unchecked background */
+    background-color: $checkbox_bg_color;
     border: none;
 }
 
@@ -315,7 +311,7 @@ QTreeView::indicator:checked,
 QListView::indicator:checked,
 QTableView::indicator:checked {
     background-color: $checkbox_bg_color_pressed;
-    image: url(check_icon.svg); /* Or remove if you want only color */
+    image: url(check_icon.svg);
 }
 
 /* Partially checked (tri-state) */
@@ -331,8 +327,8 @@ QTableView::indicator:indeterminate {
 /* ------------------------------------------------------------------------- */
 /* Dialog */
 QDialog {
-    background-color: $background_panel;   /* Dark background */
-    color: $text_foreground;            /* Default text */
+    background-color: $background_panel;
+    color: $text_foreground;
     border-radius: $form_radius;
     padding: 10px;
 }
